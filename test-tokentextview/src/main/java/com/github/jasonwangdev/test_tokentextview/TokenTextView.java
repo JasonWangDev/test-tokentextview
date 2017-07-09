@@ -1,16 +1,15 @@
-package com.github.jasonwangdev.tokentextview;
+package com.github.jasonwangdev.test_tokentextview;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
 /**
  * Created by mgod on 5/27/15.
  *
  * Simple custom view example to show how to get selected events from the token
- * view. See ContactsCompletionView and contact_token.xml for usage
+ * view. See ContactsCompletionView and token usage
  */
-public class TokenTextView extends TextView {
+public class TokenTextView extends android.support.v7.widget.AppCompatTextView {
 
     public TokenTextView(Context context) {
         super(context);
@@ -24,6 +23,6 @@ public class TokenTextView extends TextView {
     @Override
     public void setSelected(boolean selected) {
         super.setSelected(selected);
-        setCompoundDrawablesWithIntrinsicBounds(0, 0, selected ? R.drawable.close_x : 0, 0);
+//        setCompoundDrawablesWithIntrinsicBounds(0, 0, selected ? R.drawable.close_x : 0, 0);
     }
 }

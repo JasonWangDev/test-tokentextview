@@ -1,4 +1,4 @@
-package com.github.jasonwangdev.tokentextview;
+package com.github.jasonwangdev.tokentextview.token;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.jasonwangdev.test_tokentextview.TokenCompleteTextView;
+import com.github.jasonwangdev.test_tokentextview.TokenTextView;
+import com.github.jasonwangdev.tokentextview.Person;
+import com.github.jasonwangdev.tokentextview.R;
 
 /**
  * Sample token completion view for basic contact info
@@ -32,7 +35,7 @@ public class ContactsCompletionView extends TokenCompleteTextView<Person> {
     @Override
     protected View getViewForObject(Person person) {
         LayoutInflater l = (LayoutInflater)getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-        TokenTextView token = (TokenTextView) l.inflate(R.layout.contact_token, (ViewGroup) getParent(), false);
+        TokenTextView token = (TokenTextView) l.inflate(R.layout.token, (ViewGroup) getParent(), false);
         token.setText(person.getEmail());
         return token;
     }

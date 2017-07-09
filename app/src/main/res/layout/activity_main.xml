@@ -2,11 +2,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.github.jasonwangdev.tokentextview.ContactsCompletionView
+    <com.github.jasonwangdev.tokentextview.token.ContactsCompletionView
         android:id="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawableRight="@drawable/ic_launcher"
         android:imeOptions="actionDone"
         android:textColor="@android:color/darker_gray"
         android:textSize="19sp"

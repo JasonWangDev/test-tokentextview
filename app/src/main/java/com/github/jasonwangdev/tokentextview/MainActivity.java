@@ -1,17 +1,15 @@
 package com.github.jasonwangdev.tokentextview;
 
-import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.github.jasonwangdev.test_tokentextview.FilteredArrayAdapter;
 import com.github.jasonwangdev.test_tokentextview.TokenCompleteTextView;
+import com.github.jasonwangdev.tokentextview.token.ContactsCompletionView;
+import com.github.jasonwangdev.tokentextview.token.TokeAdapter;
 
 import java.util.List;
 import java.util.Random;
@@ -37,29 +35,7 @@ public class MainActivity extends AppCompatActivity implements TokenCompleteText
                         "siniša_damianos_pilirani_karoline_slootmaekers@example.com")
         };
 
-        adapter = new FilteredArrayAdapter<Person>(this, R.layout.person_layout, people) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                if (convertView == null) {
-
-                    LayoutInflater l = (LayoutInflater)getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-                    convertView = l.inflate(R.layout.person_layout, parent, false);
-                }
-
-                Person p = getItem(position);
-                ((TextView)convertView.findViewById(R.id.name)).setText(p.getName());
-                ((TextView)convertView.findViewById(R.id.email)).setText(p.getEmail());
-
-                return convertView;
-            }
-
-            @Override
-            protected boolean keepObject(Person person, String mask) {
-                mask = mask.toLowerCase();
-                return person.getName().toLowerCase().startsWith(mask) || person.getEmail().toLowerCase().startsWith(mask);
-            }
-        };
-
+        adapter = new TokeAdapter(this, R.layout.person_layout, people);
         completionView = (ContactsCompletionView)findViewById(R.id.searchView);
         completionView.setAdapter(adapter);
         completionView.setTokenListener(this);

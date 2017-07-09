@@ -3,9 +3,11 @@ package com.github.jasonwangdev.test_tokentextview;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -55,7 +57,7 @@ import java.util.List;
  *
  * @author mgod
  */
-public abstract class TokenCompleteTextView<T> extends MultiAutoCompleteTextView implements TextView.OnEditorActionListener, View.OnClickListener {
+public abstract class TokenCompleteTextView<T> extends android.support.v7.widget.AppCompatMultiAutoCompleteTextView implements TextView.OnEditorActionListener, View.OnClickListener {
     //Logging
     public static final String TAG = "TokenAutoComplete";
 
@@ -203,6 +205,13 @@ public abstract class TokenCompleteTextView<T> extends MultiAutoCompleteTextView
         setInputType(InputType.TYPE_NULL);
     }
 
+
+    private int[][] drawableSize = {{-1, -1}, // Left (width, height)
+            {-1, -1}, // Top (width, height)
+            {-1, -1}, // Right (width, height)
+            {-1, -1}};// Bottom (width, height)
+
+
     public TokenCompleteTextView(Context context) {
         super(context);
         init();
@@ -211,11 +220,61 @@ public abstract class TokenCompleteTextView<T> extends MultiAutoCompleteTextView
     public TokenCompleteTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
+
+        setDrawable(context, attrs);
     }
 
     public TokenCompleteTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
+
+        setDrawable(context, attrs);
+    }
+
+    private void setDrawable(Context context, AttributeSet attrs) {
+        if (attrs == null)
+            return;
+
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.TokenCompleteTextView);
+
+        Drawable[] drawables = {typedArray.getDrawable(R.styleable.TokenCompleteTextView_drawableLeft),
+                                                        typedArray.getDrawable(R.styleable.TokenCompleteTextView_drawableTop),
+                                                        typedArray.getDrawable(R.styleable.TokenCompleteTextView_drawableRight),
+                                                        typedArray.getDrawable(R.styleable.TokenCompleteTextView_drawableBottom)};
+
+        // 沒有設置圖片時大小預設 0，有設置圖片但沒有設置大小時預設對應解析度的圖片的原始大小
+        drawableSize[0][0] = drawables[0] != null ? typedArray.getDimensionPixelSize(R.styleable.TokenCompleteTextView_drawableLeftWidth, drawables[0].getIntrinsicWidth()) : 0;
+        drawableSize[0][1] = drawables[0] != null ? typedArray.getDimensionPixelSize(R.styleable.TokenCompleteTextView_drawableLeftHeight, drawables[0].getIntrinsicHeight()) : 0;
+
+        drawableSize[1][0] = drawables[1] != null ? typedArray.getDimensionPixelSize(R.styleable.TokenCompleteTextView_drawableTopWidth, drawables[1].getIntrinsicWidth()) : 0;
+        drawableSize[1][1] = drawables[1] != null ? typedArray.getDimensionPixelSize(R.styleable.TokenCompleteTextView_drawableTopHeight, drawables[1].getIntrinsicHeight()) : 0;
+
+        drawableSize[2][0] = drawables[2] != null ? typedArray.getDimensionPixelSize(R.styleable.TokenCompleteTextView_drawableRightWidth, drawables[2].getIntrinsicWidth()) : 0;
+        drawableSize[2][1] = drawables[2] != null ? typedArray.getDimensionPixelSize(R.styleable.TokenCompleteTextView_drawableRightHeight, drawables[2].getIntrinsicHeight()) : 0;
+
+        drawableSize[3][0] = drawables[3] != null ? typedArray.getDimensionPixelSize(R.styleable.TokenCompleteTextView_drawableBottomWidth, drawables[3].getIntrinsicWidth()) : 0;
+        drawableSize[3][1] = drawables[3] != null ? typedArray.getDimensionPixelSize(R.styleable.TokenCompleteTextView_drawableBottomHeight, drawables[3].getIntrinsicHeight()) : 0;
+
+        // 參數物件使用完畢後必定釋放資源
+        typedArray.recycle();
+
+        setDrawable(drawables[0], drawables[1], drawables[2], drawables[3]);
+    }
+
+    public void setDrawable(Drawable drawableLeft, Drawable drawableTop, Drawable drawableRight, Drawable drawableBottom) {
+        if (drawableLeft != null && drawableSize[0][0] > 0 && drawableSize[0][1] > 0)
+            drawableLeft.setBounds(0, 0,drawableSize[0][0], drawableSize[0][1]);
+
+        if (drawableTop != null && drawableSize[1][0] > 0 && drawableSize[1][1] > 0)
+            drawableTop.setBounds(0, 0,drawableSize[1][0], drawableSize[1][1]);
+
+        if (drawableRight != null && drawableSize[2][0] > 0 && drawableSize[2][1] > 0)
+            drawableRight.setBounds(0, 0,drawableSize[2][0], drawableSize[2][1]);
+
+        if (drawableBottom != null && drawableSize[3][0] > 0 && drawableSize[3][1] > 0)
+            drawableBottom.setBounds(0, 0,drawableSize[3][0], drawableSize[3][1]);
+
+        setCompoundDrawables(drawableLeft, drawableTop, drawableRight, drawableBottom);
     }
 
     @Override
